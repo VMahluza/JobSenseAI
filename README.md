@@ -19,7 +19,6 @@ AI Interviewer is an intelligent hiring assistant that conducts **AI-driven job 
 📖 **Read the full documentation** ➡️ [README.md](./README.md)  
 
 💻 **Get Started:**  
-```sh
 git clone https://github.com/your-username/ai-interviewer.git
 cd ai-interviewer
 
