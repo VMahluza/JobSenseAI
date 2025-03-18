@@ -200,3 +200,83 @@ sequenceDiagram
     Backend->>Frontend: GraphQL Mutation: Complete Interview
     Frontend->>Candidate: Display Final Score and Report
 ```
+
+# 📊 **Entity Relationship Diagram (ERD) Explanation**
+
+The **Entity Relationship Diagram (ERD)** represents the relationships between the key entities in the **AI Interviewer** system. It shows how **Users**, **CVs**, **Interviews**, and **Jobs** are connected within the application.
+
+---
+
+## 🧑‍💼 **Entities & Relationships:**
+
+### 1. **Users**
+   - The **Users** table stores information about all the users in the system, which could be either candidates, recruiters, or interviewers.
+   - **Attributes:**
+     - `id` (Primary Key): A unique identifier for each user.
+     - `name`: The full name of the user.
+     - `email`: The user's email address.
+     - `role`: The role of the user (e.g., Candidate, Recruiter).
+   
+   - **Relationships:**
+     - **Uploads CVs**: Each **User** can upload multiple **CVs**.
+     - **Participates in Interviews**: Each **User** can participate in multiple **Interviews** (as a candidate).
+     - **Posts Jobs**: Each **User** (if a recruiter) can post multiple **Jobs**.
+
+### 2. **CVs**
+   - The **CVs** table stores uploaded CVs for users.
+   - **Attributes:**
+     - `id` (Primary Key): A unique identifier for each CV.
+     - `user_id` (Foreign Key): References the user who uploaded the CV.
+     - `file_url`: A URL to the uploaded CV file.
+
+### 3. **Interviews**
+   - The **Interviews** table stores the details of each interview, including the candidate's performance.
+   - **Attributes:**
+     - `id` (Primary Key): A unique identifier for each interview.
+     - `candidate_id` (Foreign Key): References the **User** who is a candidate in the interview.
+     - `job_id` (Foreign Key): References the **Job** being applied for.
+     - `score`: The score given to the candidate based on their responses.
+     - `report_url`: A URL to the detailed interview report.
+
+### 4. **Jobs**
+   - The **Jobs** table stores information about the job positions posted by recruiters.
+   - **Attributes:**
+     - `id` (Primary Key): A unique identifier for each job posting.
+     - `recruiter_id` (Foreign Key): References the **User** who posted the job.
+     - `title`: The job title.
+     - `description`: A description of the job position.
+
+---
+
+## 📐 **ERD Representation:**
+
+```mermaid
+erDiagram
+    USERS ||--o{ CVs : "uploads"
+    USERS ||--o{ Interviews : "participates in"
+    USERS ||--o{ Jobs : "posts"
+    USERS {
+        int id PK
+        string name
+        string email
+        string role
+    }
+    CVs {
+        int id PK
+        int user_id FK
+        string file_url
+    }
+    Interviews {
+        int id PK
+        int candidate_id FK
+        int job_id FK
+        float score
+        string report_url
+    }
+    Jobs {
+        int id PK
+        int recruiter_id FK
+        string title
+        string description
+    }
+```
