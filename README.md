@@ -280,3 +280,101 @@ erDiagram
         string description
     }
 ```
+# 🔄 **Use Case Diagram Explanation**
+
+This **Use Case Diagram** outlines the interactions between the actors (Candidate, Recruiter, and AI Services) and the various features within the **AI Interviewer** system. It shows the key use cases and how users (actors) interact with the system to perform different tasks during the interview process.
+
+---
+
+## 🧑‍💼 **Actors:**
+
+### 1. **Candidate (C)**:
+   - The **Candidate** is the user applying for jobs and participating in interviews.
+   - The candidate can perform the following actions:
+     - **Register/Login**: Register a new account or log into the system.
+     - **Upload CV**: Upload their CV for job applications.
+     - **Apply for Job**: Apply for a job posting.
+
+### 2. **Recruiter (R)**:
+   - The **Recruiter** is the user posting jobs and reviewing applications.
+   - The recruiter can perform the following actions:
+     - **Register/Login**: Register a new account or log into the system.
+     - **Create Job Posting**: Post a new job opportunity.
+     - **View Applications**: View the applications submitted by candidates for the jobs posted.
+
+### 3. **AI Services (AI)**:
+   - **AI Services** represents the backend processing and AI components in the system responsible for generating questions, evaluating answers, and generating reports during interviews.
+   - The AI performs the following actions:
+     - **Generate Questions**: Generate interview questions for the candidate based on the job.
+     - **Evaluate Responses**: Evaluate the candidate's responses to the questions.
+     - **Generate Report**: Create a final report based on the interview process.
+
+---
+
+## 💡 **System:**
+
+The **AI Interviewer System** consists of several key features divided into core features and AI-driven processes:
+
+### **Core Features:**
+1. **Register/Login**: Users (candidates and recruiters) can create an account or log into the system to access their respective functionalities.
+2. **Upload CV**: Candidates can upload their CV for consideration in job applications.
+3. **Create Job Posting**: Recruiters can create job postings, including job details, position requirements, etc.
+4. **Apply for Job**: Candidates can apply for jobs listed by recruiters.
+5. **View Applications**: Recruiters can view the list of applications they have received for the job postings.
+
+### **AI Processing:**
+1. **Generate Questions**: After the candidate applies for a job and starts an interview, the AI generates questions specific to the role and the candidate's profile.
+2. **Evaluate Responses**: The AI evaluates the candidate’s verbal responses to the interview questions.
+3. **Generate Report**: The AI generates a final report, including a score and detailed feedback based on the candidate's performance in the interview.
+
+---
+
+## 📐 **Use Case Diagram Representation:**
+
+```mermaid
+flowchart TD
+    classDef actor fill:#f9f,stroke:#333,stroke-width:2px,color:#000
+    classDef system fill:#bbf,stroke:#333,stroke-width:2px,color:#000
+    classDef usecase fill:#dfd,stroke:#333,stroke-width:1px,color:#000
+    classDef ai fill:#ffd,stroke:#333,stroke-width:1px,color:#000
+
+    subgraph Actors
+        C[Candidate]:::actor
+        R[Recruiter]:::actor
+        AI[AI Services]:::actor
+    end
+
+    subgraph System["AI Interviewer System"]
+        direction TB
+        subgraph Core["Core Features"]
+            direction LR
+            UC1[Register/Login]:::usecase
+            UC2[Upload CV]:::usecase
+            UC3[Create Job Posting]:::usecase
+            UC4[Apply for Job]:::usecase
+            UC5[View Applications]:::usecase
+        end
+        
+        subgraph AI["AI Processing"]
+            direction LR
+            UC6[Generate Questions]:::ai
+            UC7[Evaluate Responses]:::ai
+            UC8[Generate Report]:::ai
+        end
+    end
+
+    C --> UC1
+    C --> UC2
+    C --> UC4
+    R --> UC1
+    R --> UC3
+    R --> UC5
+    AI --> UC6
+    AI --> UC7
+    AI --> UC8
+    
+    UC4 --> UC6
+    UC6 --> UC7
+    UC7 --> UC8
+    UC8 --> UC5
+```
