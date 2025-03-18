@@ -378,3 +378,162 @@ flowchart TD
     UC7 --> UC8
     UC8 --> UC5
 ```
+# 🔄 **Data Flow Diagram (DFD) Explanation**
+
+The **Data Flow Diagram (DFD)** illustrates the flow of data between various components within the **AI Interviewer System**. This includes the interaction between external systems, the frontend and backend layers, and the storage components. It provides a clear view of how data moves through the system, from user input to AI processing and storage.
+
+---
+
+## 🧑‍💼 **Actors:**
+
+### 1. **Candidate (C)**
+   - The **Candidate** is a user applying for jobs and participating in interviews.
+   - Data flow: 
+     - Registers with the system by sending **registration data** to the **Authentication** process.
+     - Uploads their **CV**, which is then managed by the **CV Management** process.
+     - Applies for a job, which triggers the **Interview Management** process.
+
+### 2. **Recruiter (R)**
+   - The **Recruiter** posts job opportunities and reviews job applications.
+   - Data flow:
+     - Logs into the system by providing **login credentials** to the **Authentication** process.
+     - Provides **Job Details** to the **Job Management** process for job postings.
+     - Views the **Applications** for job postings through the **Interview Management** process.
+
+### 3. **ElevenLabs API (E)**
+   - The **ElevenLabs API** is an external system used for voice processing.
+   - Data flow: 
+     - Takes **voice input** from the candidate during the interview and returns **transcribed text**.
+
+---
+
+## 🧠 **Backend Processes:**
+
+### 1. **Frontend Layer:**
+   - **User Interface (UI)**: Displays the system's interface for user interaction, such as job applications and interview details.
+   - **Authentication (Auth)**: Manages user login, registration, and session management.
+
+### 2. **Backend Layer:**
+
+   - **Core Processing:**
+     - **CV Management (CV)**: Handles the upload and storage of CVs.
+     - **Job Management (Job)**: Manages job posting details and stores them in the database.
+     - **Interview Management (Int)**: Handles job applications, interview scheduling, and stores interview data.
+
+   - **AI Processing:**
+     - **Question Generation (QGen)**: Generates interview questions based on the job and candidate profile.
+     - **Response Evaluation (Eval)**: Evaluates the candidate's responses to interview questions.
+     - **Report Generation (Rep)**: Generates a final interview report with feedback and scores.
+
+---
+
+## 💾 **Storage Layer:**
+
+   - **PostgreSQL DB (DB)**: Stores user profiles, job postings, interview details, and results.
+   - **AWS S3 (S3)**: Stores files such as uploaded CVs.
+
+---
+
+## 🔄 **Data Flows:**
+
+1. **Candidate Registration & Login:**
+   - The **Candidate** registers with the system, sending their registration data to the **Authentication** process.
+   - The **Recruiter** logs in with their credentials, which are processed by the **Authentication** system to create an authenticated session.
+   - The session information is passed to the **User Interface (UI)** for displaying the user’s dashboard.
+
+2. **CV Management:**
+   - The **Candidate** uploads their CV, which is processed by the **CV Management** process.
+   - The **CV Management** process stores the file on **AWS S3** and the metadata in the **PostgreSQL DB**.
+
+3. **Job Posting:**
+   - The **Recruiter** provides job details, which are processed by the **Job Management** process and stored in the database for later retrieval.
+
+4. **Job Application and Interview Process:**
+   - The **Candidate** applies for a job, triggering the **Interview Management** process.
+   - The **Interview Management** process sends an interview request to the **Question Generation (QGen)** process.
+   - **QGen** generates interview questions and sends them back to the **Interview Management** process.
+   - During the interview, the **Candidate** provides voice input, which is sent to the **ElevenLabs API** for transcription.
+   - The **ElevenLabs API** returns the transcribed text to the **Response Evaluation (Eval)** process for scoring and feedback.
+   - The **Response Evaluation** process sends the score and feedback to the **Report Generation (Rep)** process.
+   - The **Report Generation** process creates the final interview report, which is stored in the **PostgreSQL DB** as part of the interview results.
+
+5. **Recruiter Viewing Applications:**
+   - The **Recruiter** can view applications and interview results stored in the **Interview Management** process.
+   - The **Interview Management** process retrieves the **application data** and presents it to the **Recruiter**.
+
+---
+
+## 📐 **Data Flow Diagram Representation:**
+
+```mermaid
+flowchart TD
+    classDef external fill:#f9f,stroke:#333,stroke-width:2px,color:#000
+    classDef process fill:#bbf,stroke:#333,stroke-width:2px,color:#000
+    classDef storage fill:#dfd,stroke:#333,stroke-width:2px,color:#000
+    classDef ai fill:#ffd,stroke:#333,stroke-width:2px,color:#000
+
+    subgraph External["External Systems"]
+        C[Candidate]:::external
+        R[Recruiter]:::external
+        E[ElevenLabs API]:::external
+    end
+
+    subgraph Frontend["Frontend Layer"]
+        UI[User Interface]:::process
+        Auth[Authentication]:::process
+    end
+
+    subgraph Backend["Backend Layer"]
+        direction TB
+        subgraph Core["Core Processing"]
+            direction LR
+            CV[CV Management]:::process
+            Job[Job Management]:::process
+            Int[Interview Management]:::process
+        end
+        
+        subgraph AI["AI Processing"]
+            direction LR
+            QGen[Question Generation]:::ai
+            Eval[Response Evaluation]:::ai
+            Rep[Report Generation]:::ai
+        end
+    end
+
+    subgraph Storage["Storage Layer"]
+        DB[(PostgreSQL DB)]:::storage
+        S3[(AWS S3)]:::storage
+    end
+
+    %% Data Flows
+    C -->|"Registration Data"| Auth
+    R -->|"Login Credentials"| Auth
+    Auth -->|"Authenticated Session"| UI
+    
+    C -->|"CV Upload"| CV
+    CV -->|"File Storage"| S3
+    CV -->|"Metadata"| DB
+    
+    R -->|"Job Details"| Job
+    Job -->|"Job Posting"| DB
+    
+    C -->|"Job Application"| Int
+    Int -->|"Interview Request"| QGen
+    QGen -->|"Generated Questions"| Int
+    Int -->|"Voice Input"| E
+    E -->|"Transcribed Text"| Eval
+    Eval -->|"Score & Feedback"| Rep
+    Rep -->|"Interview Report"| Int
+    Int -->|"Results"| DB
+    
+    R -->|"View Applications"| Int
+    Int -->|"Application Data"| R
+    
+    %% Legend
+    subgraph Legend["Legend"]
+        E1[External System]:::external
+        P1[Process]:::process
+        S1[(Storage)]:::storage
+        A1[AI Component]:::ai
+    end
+```
