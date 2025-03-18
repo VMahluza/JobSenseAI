@@ -95,4 +95,46 @@ flowchart TD
     %% DevOps Connections
     N --> |Automated Deployment| E & G
     O --> |Monitoring| E & G
+```
+# 🧠 AI Interviewer – Interview Process Flow  
 
+This diagram represents the **interview process flow** from the candidate selecting a job position to receiving the final evaluation and report.
+
+```mermaid
+sequenceDiagram
+    actor Candidate
+    participant Frontend as Next.js Frontend
+    participant Backend as Django Backend
+    participant Llama as LlamaIndex
+    participant Eleven as ElevenLabs
+    participant Storage as Storage Layer
+
+    Note over Candidate,Storage: Interview Process Flow
+
+    Candidate->>Frontend: Select Job Position
+    Frontend->>Backend: GraphQL Query: Get Job Details
+    Backend->>Frontend: Return Job Details
+    
+    Candidate->>Frontend: Start Interview
+    Frontend->>Backend: GraphQL Mutation: Begin Interview
+    
+    Backend->>Llama: Generate Interview Questions
+    Llama-->>Backend: Return Generated Questions
+    
+    loop For Each Question
+        Backend->>Eleven: TTS: Convert Question to Speech
+        Eleven-->>Backend: Return Audio Stream
+        
+        Backend->>Eleven: STT: Convert Voice Response to Text
+        Eleven-->>Backend: Return Transcribed Text
+        
+        Backend->>Llama: Evaluate Response
+        Llama-->>Backend: Return Score and Feedback
+    end
+    
+    Backend->>Storage: Save Interview Results
+    Storage-->>Backend: Confirm Save
+    
+    Backend->>Frontend: GraphQL Mutation: Complete Interview
+    Frontend->>Candidate: Display Final Score and Report
+```
