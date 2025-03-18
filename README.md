@@ -96,14 +96,6 @@ flowchart TD
     N --> |Automated Deployment| E & G
     O --> |Monitoring| E & G
 ```
-
-
-
-# 🧠 AI Interviewer – Interview Process Flow  
-
-
-This diagram represents the **interview process flow** from the candidate selecting a job position to receiving the final evaluation and report.
-
 # 🧠 AI Interviewer – Interview Process Flow Explanation
 
 This section explains the **Interview Process Flow** shown in the sequence diagram. It details how the **AI Interviewer** system works from when a candidate selects a job position to receiving their final score and report.
